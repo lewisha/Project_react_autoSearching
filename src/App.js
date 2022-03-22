@@ -2,14 +2,28 @@ import React, { useState, useMemo, useRef } from "react";
 import ReactDom from "react-dom";
 import "./styles.css";
 
-const SearchKeywords = (searchKeywords) => {
-  return <div>what</div>;
+const SearchKeywords = ({ searchKeywords }) => {
+  if (!searchKeywords) {
+    return null;
+  }
+  return (
+    <ul>
+      {searchKeywords.map((ele, idx) => {
+        return <li key={"${ele}-${idx}"}>{ele}</li>;
+      })}
+    </ul>
+  );
 };
 
 const Examp = () => {
   const [inputVal, setInputVal] = useState("");
-  const [searchKeywords] = useState(["apple ip", "ipad", "iwatch"]);
+  const [keywords] = useState(["apple ip", "ipad", "iwa"]);
 
+  const searchKeywords = useMemo(() => {
+    return keywords.filter((keyword) => {
+      return keyword.includes(inputVal.toLowerCase());
+    });
+  }, [inputVal]);
   return (
     <div>
       <input
@@ -22,7 +36,7 @@ const Examp = () => {
 
       <button className="btn-add">addme</button>
       <button className="btn-del">delme</button>
-      <SearchKeywords />
+      <SearchKeywords searchKeywords={searchKeywords} />
     </div>
   );
 };
